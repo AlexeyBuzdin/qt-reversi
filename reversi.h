@@ -17,6 +17,10 @@ private:
     void configureInterface();
     QLabel *lGameField;
     QLabel *lGameStatus;
+    QLabel ***gamingField;
+
+    QImage *white;
+    QImage *black;
 
 };
 
