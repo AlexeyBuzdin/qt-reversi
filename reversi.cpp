@@ -6,6 +6,10 @@ Reversi::Reversi(QWidget *parent) :
 		QWidget(parent) {
 	ui.setupUi(this);
 	configureInterface();
+	changeField(3, 3, black);
+	changeField(3, 4, white);
+	changeField(4, 3, white);
+	changeField(4, 4, black);
 }
 
 void Reversi::configureInterface() {
@@ -13,21 +17,30 @@ void Reversi::configureInterface() {
 	lGameField = findChild<QLabel*>("gameField");
 	lGameField->hide();
 
-	white = new QImage(QSize(50, 50), QImage::Format_RGB16);
-	white->load("resource/white.png");
+	whiteImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
+	whiteImg->load("resource/white.png");
 
-	black = new QImage(QSize(50, 50), QImage::Format_RGB16);
-	black->load("resource/black.png");
+	blackImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
+	blackImg->load("resource/black.png");
 
 	gamingField = new QLabel**[FIELD_SIZE];
-	for (unint i = 0; i < FIELD_SIZE ; i++) {
+	for (unint i = 0; i < FIELD_SIZE; i++) {
 		gamingField[i] = new QLabel*[FIELD_SIZE];
 		for (unint j = 0; j < FIELD_SIZE; j++) {
-			QString cellAdress = "cell" + QString::number(i) + QString::number(j);
+			QString cellAdress = "cell" + QString::number(i)
+					+ QString::number(j);
 			gamingField[i][j] = findChild<QLabel*>(cellAdress);
-			gamingField[i][j]->setPixmap(QPixmap::fromImage(*white));
 		}
 	}
+}
+
+void Reversi::changeField(int x, int y, Turn turn) {
+	QImage *figure;
+	switch (turn) {
+		case white: figure = whiteImg; break;
+		case black: figure = blackImg; break;
+	}
+	gamingField[x][y]->setPixmap(QPixmap::fromImage(*figure));
 }
 
 Reversi::~Reversi() {
@@ -35,6 +48,6 @@ Reversi::~Reversi() {
 		delete[] gamingField[i];
 	}
 	delete[] gamingField;
-	delete white;
-	delete black;
+	delete whiteImg;
+	delete blackImg;
 }

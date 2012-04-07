@@ -3,24 +3,29 @@
 
 #include <QtGui/QWidget>
 #include "ui_reversi.h"
+enum Turn {
+	white, black
+};
 
-class Reversi : public QWidget
-{
-    Q_OBJECT
+class Reversi: public QWidget {
+Q_OBJECT
 
 public:
-    Reversi(QWidget *parent = 0);
-    ~Reversi();
+	Reversi(QWidget *parent = 0);
+	~Reversi();
 
 private:
-    Ui::ReversiClass ui;
-    void configureInterface();
-    QLabel *lGameField;
-    QLabel *lGameStatus;
-    QLabel ***gamingField;
+	Ui::ReversiClass ui;
+	void configureInterface();
+	void changeField(int x, int y, Turn turn);
 
-    QImage *white;
-    QImage *black;
+	QLabel *lGameField;
+	QLabel *lGameStatus;
+	QLabel ***gamingField;
+	int fieldStatus[8][8];
+
+	QImage *whiteImg;
+	QImage *blackImg;
 
 };
 
