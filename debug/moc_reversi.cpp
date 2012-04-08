@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'reversi.h'
 **
-** Created: Sun Apr 8 14:25:19 2012
+** Created: Sun Apr 8 17:17:24 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!

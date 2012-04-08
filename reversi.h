@@ -3,7 +3,7 @@
 
 #include <QtGui/QWidget>
 #include "ui_reversi.h"
-
+#include "src/ClickableLabel.h"
 class Reversi: public QWidget {
 Q_OBJECT
 
@@ -19,7 +19,7 @@ private:
 
 	QLabel *lGameField;
 	QLabel *lGameStatus;
-	QLabel ***gamingField;
+	ClickableLabel ***gamingField;
 	int fieldStatus[8][8];
 
 	QImage *whiteImg;
