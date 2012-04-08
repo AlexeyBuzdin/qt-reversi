@@ -4,7 +4,9 @@
 #include <QtGui/QWidget>
 #include "ui_reversi.h"
 #include "src/ClickableLabel.h"
+
 class Reversi: public QWidget {
+
 Q_OBJECT
 
 public:
@@ -13,13 +15,20 @@ public:
 
 private:
 	Ui::ReversiClass ui;
-	void configureInterface();
-	void changeField();
-	void turn(int x, int y);
 
-	QLabel *lGameField;
+	// Method for UI configuration, used at constructor phase
+	void configureInterface();
+	// Refreshes UI gaming field with data taken from fieldStatus
+	void refreshField();
+
+	QLabel *lGameBackground;
 	QLabel *lGameStatus;
+
+	// Field that shows which turn it is.
+	int gameStatus;
+	// UI game field
 	ClickableLabel ***gamingField;
+	// Game field
 	int fieldStatus[8][8];
 
 	QImage *whiteImg;
