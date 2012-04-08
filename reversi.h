@@ -3,9 +3,6 @@
 
 #include <QtGui/QWidget>
 #include "ui_reversi.h"
-enum Turn {
-	white, black
-};
 
 class Reversi: public QWidget {
 Q_OBJECT
@@ -17,7 +14,8 @@ public:
 private:
 	Ui::ReversiClass ui;
 	void configureInterface();
-	void changeField(int x, int y, Turn turn);
+	void changeField();
+	void turn(int x, int y, int turn);
 
 	QLabel *lGameField;
 	QLabel *lGameStatus;
@@ -26,6 +24,7 @@ private:
 
 	QImage *whiteImg;
 	QImage *blackImg;
+	QImage *blankImg;
 
 };
 
