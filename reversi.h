@@ -15,7 +15,7 @@ private:
 	Ui::ReversiClass ui;
 	void configureInterface();
 	void changeField();
-	void turn(int x, int y, int turn);
+	void turn(int x, int y);
 
 	QLabel *lGameField;
 	QLabel *lGameStatus;
@@ -25,6 +25,9 @@ private:
 	QImage *whiteImg;
 	QImage *blackImg;
 	QImage *blankImg;
+
+public slots:
+	void cellClicked(int x, int y);
 
 };
 

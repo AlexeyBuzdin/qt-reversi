@@ -7,27 +7,10 @@ Reversi::Reversi(QWidget *parent) :
 	ui.setupUi(this);
 	configureInterface();
 
-	turn(0, 0, 1);
-	turn(0, 1, 1);
-	turn(0, 2, 1);
-	turn(0, 3, 1);
-	turn(0, 4, 1);
-	turn(0, 5, 1);
-	turn(0, 6, 1);
-	turn(0, 7, 1);
-
-	turn(1, 0, 1);
-	turn(2, 0, 1);
-	turn(3, 0, 1);
-	turn(4, 0, 1);
-	turn(5, 0, 1);
-	turn(6, 0, 1);
-	turn(7, 0, 1);
-
-	turn(3, 3, 1);
-	turn(3, 4, -1);
-	turn(4, 3, -1);
-	turn(4, 4, 1);
+	cellClicked(3, 3);
+	cellClicked(3, 4);
+	cellClicked(4, 3);
+	cellClicked(4, 4);
  }
 
 void Reversi::configureInterface() {
@@ -48,15 +31,20 @@ void Reversi::configureInterface() {
 		gamingField[i] = new ClickableLabel*[FIELD_SIZE];
 		for (unint j = 0; j < FIELD_SIZE; j++) {
 			gamingField[i][j] = new ClickableLabel(i, j, this);
+			QObject::connect (gamingField[i][j], SIGNAL (clicked(int, int)),
+								        this, SLOT (cellClicked(int, int)));
 			fieldStatus[i][j] = 0;
 		}
 	}
 }
 
-void Reversi::turn(int x, int y, int turn){
-	fieldStatus[x][y] = turn;
+void Reversi::cellClicked(int x, int y){
+	if (fieldStatus[x][y] == 0){
+		fieldStatus[x][y] = -1;
 
-	changeField();
+
+		changeField();
+	}
 }
 
 void Reversi::changeField() {
@@ -68,10 +56,7 @@ void Reversi::changeField() {
 				case  1: figure = blackImg; break;
 				case  0: figure = blankImg; break;
 			}
-			//gamingField[i][j]->setPixmap(QPixmap::fromImage(*figure));
-			QPixmap* test = new QPixmap(CHIP_SIZE, CHIP_SIZE);
-			test->fill(QColor::fromRgb(20,20,20,20));
-			gamingField[i][j]->setPixmap(*test);
+			gamingField[i][j]->setPixmap(QPixmap::fromImage(*figure));
 		}
 	}
 }

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'ClickableLabel.h'
 **
-** Created: Sun Apr 8 17:17:23 2012
+** Created: Sun Apr 8 18:57:48 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_ClickableLabel[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -33,15 +33,11 @@ static const uint qt_meta_data_ClickableLabel[] = {
  // signals: signature, parameters, type, tag, flags
       20,   16,   15,   15, 0x05,
 
- // slots: signature, parameters, type, tag, flags
-      37,   16,   15,   15, 0x0a,
-
        0        // eod
 };
 
 static const char qt_meta_stringdata_ClickableLabel[] = {
     "ClickableLabel\0\0x,y\0clicked(int,int)\0"
-    "slotClicked(int,int)\0"
 };
 
 const QMetaObject ClickableLabel::staticMetaObject = {
@@ -74,10 +70,9 @@ int ClickableLabel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: clicked((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 1: slotClicked((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         default: ;
         }
-        _id -= 2;
+        _id -= 1;
     }
     return _id;
 }

@@ -13,9 +13,6 @@ public:
 signals:
 	void clicked(int x, int y);
 
-public slots:
-	void slotClicked(int x, int y);
-
 protected:
 	int xAssis;
 	int yAssis;
