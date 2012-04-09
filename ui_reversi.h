@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'reversi.ui'
 **
-** Created: Sun Apr 8 19:32:42 2012
+** Created: Mon Apr 9 13:17:34 2012
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -31,14 +31,14 @@ public:
         if (ReversiClass->objectName().isEmpty())
             ReversiClass->setObjectName(QString::fromUtf8("ReversiClass"));
         ReversiClass->setEnabled(true);
-        ReversiClass->resize(473, 466);
+        ReversiClass->resize(474, 466);
         ReversiClass->setMaximumSize(QSize(10000, 10000));
         gameStatus = new QLabel(ReversiClass);
         gameStatus->setObjectName(QString::fromUtf8("gameStatus"));
         gameStatus->setGeometry(QRect(20, 20, 161, 31));
         gameField = new QLabel(ReversiClass);
         gameField->setObjectName(QString::fromUtf8("gameField"));
-        gameField->setGeometry(QRect(30, 50, 425, 425));
+        gameField->setGeometry(QRect(30, 40, 425, 425));
         gameField->setMinimumSize(QSize(425, 0));
         gameField->setPixmap(QPixmap(QString::fromUtf8("resource/field.png")));
 
@@ -50,7 +50,7 @@ public:
     void retranslateUi(QWidget *ReversiClass)
     {
         ReversiClass->setWindowTitle(QApplication::translate("ReversiClass", "Reversi", 0, QApplication::UnicodeUTF8));
-        gameStatus->setText(QApplication::translate("ReversiClass", "It's white players turn", 0, QApplication::UnicodeUTF8));
+        gameStatus->setText(QApplication::translate("ReversiClass", "It's black player's turn", 0, QApplication::UnicodeUTF8));
         gameField->setText(QString());
     } // retranslateUi
 

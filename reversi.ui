@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
+    <width>474</width>
     <height>466</height>
    </rect>
   </property>
@@ -32,14 +32,14 @@
     </rect>
    </property>
    <property name="text">
-    <string>It's white players turn</string>
+    <string>It's black player's turn</string>
    </property>
   </widget>
   <widget class="QLabel" name="gameField">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>50</y>
+     <y>40</y>
      <width>425</width>
      <height>425</height>
     </rect>

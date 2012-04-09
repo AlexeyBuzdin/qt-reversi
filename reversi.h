@@ -4,6 +4,8 @@
 #include <QtGui/QWidget>
 #include "ui_reversi.h"
 #include "src/ClickableLabel.h"
+#include "src/Lines.h"
+#include "src/Point.h"
 
 class Reversi: public QWidget {
 
@@ -29,7 +31,7 @@ private:
 	// UI game field
 	ClickableLabel ***gamingField;
 	// Game field
-	int fieldStatus[8][8];
+	int **fieldStatus;
 
 	QImage *whiteImg;
 	QImage *blackImg;
