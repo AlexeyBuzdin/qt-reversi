@@ -1,7 +1,7 @@
 #include "Point.h"
 
 bool Point::operator!=(Point point){
-	return !(point.x != this->x) && !(point.y != this->y);
+	return (point.x != this->x) && (point.y != this->y);
 }
 
 Point::Point(int x, int y) {

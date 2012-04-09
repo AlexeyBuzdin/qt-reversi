@@ -48,9 +48,14 @@ void Reversi::configureInterface() {
 }
 
 void Reversi::cellClicked(int x, int y) {
-	Lines lines(gameStatus, Point(x, y));
-	if (fieldStatus[x][y] == 0 && lines.updateField(fieldStatus, FIELD_SIZE)) {
-		refreshField();
+	Lines lines(gameStatus, Point(x, y), fieldStatus, FIELD_SIZE);
+	if(fieldStatus[x][y] == 0){
+		QList<Point> modifiedCells = lines.updateField();
+		if ((modifiedCells.size() > 0)) {
+			/*QFrame* popup1 = new QFrame(this, Qt::Popup | Qt::Window );
+			popup1->show();*/
+			refreshField();
+		}
 	}
 }
 
@@ -72,14 +77,14 @@ void Reversi::refreshField() {
 			gamingField[i][j]->setPixmap(QPixmap::fromImage(*figure));
 		}
 	}
+
 	// Change player turn
-	//gameStatus *= -1;
 	switch (gameStatus *= -1) {
 	case -1:
-		lGameStatus->setText("It\' white player\s turn");
+		lGameStatus->setText("It\' white player\'s turn");
 		break;
 	case 1:
-		lGameStatus->setText("It\' black player\s turn");
+		lGameStatus->setText("It\' black player\'s turn");
 		break;
 	}
 }
