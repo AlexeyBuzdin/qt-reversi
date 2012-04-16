@@ -4,7 +4,13 @@ typedef unsigned int unint;
 Lines::Lines(int chipColor, Point point, int** field, int fieldSize) {
 	this->chipColor = chipColor;
 	this->point = point;
-	gameField = field;
+	gameField = new int*[fieldSize];
+	for(unint i = 0; i < fieldSize; i++){
+		gameField[i] = new int[fieldSize];
+		for(unint j = 0; j < fieldSize; j++){
+			gameField[i][j] = field[i][j];
+		}
+	}
 	this->fieldSize = fieldSize;
 }
 
@@ -26,9 +32,7 @@ QList<Point> Lines::updateField() {
 	result.append(checkALine(Point(1, -1)));
 
 	if (result.size() > 0) {
-		for (unint i = 0; i < result.size(); i++) {
-			gameField[result.at(i).x][result.at(i).y] = chipColor;
-		}
+		result.append(Point(point.x, point.y));
 		return result;
 	} else {
 		gameField[point.x][point.y] = 0;
@@ -60,4 +64,12 @@ QList<Point> Lines::checkALine(Point pattern) {
 	} else {
 		return QList<Point>();
 	}
+}
+
+Lines::~Lines() {
+
+	for(unint i = 0; i < fieldSize; i++){
+		delete [] gameField[i];
+	}
+	delete [] gameField;
 }

@@ -8,6 +8,7 @@ typedef unsigned int unint;
 Reversi::Reversi(QWidget *parent) :
 		QWidget(parent) {
 	ui.setupUi(this);
+	this->setFixedSize(460, 460);
 	gameStatus = WHITE_PLAYER_TURN;
 	configureInterface();
 
@@ -16,7 +17,7 @@ Reversi::Reversi(QWidget *parent) :
 void Reversi::configureInterface() {
 	lGameStatus = findChild<QLabel*>("gameStatus");
 	lGameBackground = findChild<QLabel*>("gameField");
-	//lGameBackground->hide();
+	lGameScore = findChild<QLabel*>("gameScore");
 
 	whiteImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
 	whiteImg->load("resource/white.png");
@@ -52,8 +53,9 @@ void Reversi::cellClicked(int x, int y) {
 	if(fieldStatus[x][y] == 0){
 		QList<Point> modifiedCells = lines.updateField();
 		if ((modifiedCells.size() > 0)) {
-			/*QFrame* popup1 = new QFrame(this, Qt::Popup | Qt::Window );
-			popup1->show();*/
+			for (unint i = 0; i < modifiedCells.size(); i++) {
+				fieldStatus[modifiedCells.at(i).x][modifiedCells.at(i).y] = gameStatus;
+			}
 			refreshField();
 		}
 	}
@@ -70,7 +72,7 @@ void Reversi::refreshField() {
 			case 1:
 				figure = blackImg;
 				break;
-			case 0:
+			default:
 				figure = blankImg;
 				break;
 			}
@@ -78,6 +80,39 @@ void Reversi::refreshField() {
 		}
 	}
 
+	changePlayer(0);
+	calculateScore();
+}
+
+void Reversi::calculateScore(){
+	int countBlack = 0;
+	int countWhite = 0;
+	for(unint i = 0; i < FIELD_SIZE; i++){
+		for(unint j = 0; j < FIELD_SIZE; j++){
+			if(fieldStatus[i][j] == BLACK_PLAYER_TURN){
+				countBlack++;
+			}
+			if(fieldStatus[i][j] == WHITE_PLAYER_TURN){
+				countWhite++;
+			}
+		}
+	}
+	lGameScore->setText(QString("Score:   %1:%2").arg(countBlack).arg(countWhite));
+}
+
+bool Reversi::thereIsNoLegalTurns(){
+	for(unint i = 0; i < FIELD_SIZE; i++){
+		for(unint j = 0; j < FIELD_SIZE; j++){
+			Lines test(gameStatus, Point(i, j), fieldStatus, FIELD_SIZE);
+			if(fieldStatus[i][j] == 0 && test.updateField().size() > 0){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+void Reversi::changePlayer(int skippedTurns){
 	// Change player turn
 	switch (gameStatus *= -1) {
 	case -1:
@@ -86,6 +121,13 @@ void Reversi::refreshField() {
 	case 1:
 		lGameStatus->setText("It\' black player\'s turn");
 		break;
+	}
+	if(thereIsNoLegalTurns() && skippedTurns < 1){
+		changePlayer(1);
+	} else if (skippedTurns > 0){
+		lGameStatus->setText("Game Over");
+		/* TODO end game */
+		return;
 	}
 }
 

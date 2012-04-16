@@ -17,7 +17,7 @@ public:
 	QList<Point> checkALine(Point pattern);
 
 	Lines(int chipColor, Point point, int** field, int fieldSize);
-	virtual ~Lines(){};
+	virtual ~Lines();
 };
 
 #endif /* LINES_H_ */
