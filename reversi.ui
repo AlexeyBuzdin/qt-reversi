@@ -35,28 +35,6 @@
     <string>It's black player's turn</string>
    </property>
   </widget>
-  <widget class="QLabel" name="gameField">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>40</y>
-     <width>425</width>
-     <height>425</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>425</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>resource/field.png</pixmap>
-   </property>
-  </widget>
   <widget class="QLabel" name="gameScore">
    <property name="geometry">
     <rect>

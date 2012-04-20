@@ -7,8 +7,8 @@
 #include "src/Lines.h"
 #include "src/Point.h"
 
-class Reversi: public QWidget {
 
+class Reversi: public QWidget {
 Q_OBJECT
 
 public:
@@ -29,7 +29,6 @@ private:
 	// Refreshes UI gaming field with data taken from fieldStatus
 	void refreshField();
 
-	QLabel *lGameBackground;
 	QLabel *lGameStatus;
 	QLabel *lGameScore;
 
@@ -43,6 +42,7 @@ private:
 	QImage *whiteImg;
 	QImage *blackImg;
 	QImage *blankImg;
+	QImage *hintImg;
 
 public slots:
 	void cellClicked(int x, int y);

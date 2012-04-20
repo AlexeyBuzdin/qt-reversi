@@ -43,24 +43,6 @@
 		<buildTargets>
 			<target name="debug3" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
 				<buildCommand>make</buildCommand>
-				<buildArguments/>
-				<buildTarget/>
-				<stopOnError>false</stopOnError>
-				<useDefaultCommand>true</useDefaultCommand>
-				<runAllBuilders>true</runAllBuilders>
-			</target>
-			<target name="debug" path="src" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
-				<buildCommand>make</buildCommand>
-				<buildArguments/>
-				<buildTarget/>
-				<stopOnError>false</stopOnError>
-				<useDefaultCommand>true</useDefaultCommand>
-				<runAllBuilders>true</runAllBuilders>
-			</target>
-			<target name="debug (1)" path="src" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
-				<buildCommand>make</buildCommand>
-				<buildArguments/>
-				<buildTarget/>
 				<stopOnError>false</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>true</runAllBuilders>

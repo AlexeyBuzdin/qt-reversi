@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'reversi.h'
 **
-** Created: Tue Apr 17 10:54:58 2012
+** Created: Fri Apr 20 19:43:41 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "reversi.h"
+#include "../reversi.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'reversi.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
