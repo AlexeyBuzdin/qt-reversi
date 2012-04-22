@@ -1,20 +1,16 @@
 #include "reversi.h"
+#include <qmessagebox.h>
 typedef unsigned int unint;
 
-#define FIELD_SIZE  8
 #define WHITE_PLAYER_TURN -1
 #define BLACK_PLAYER_TURN 1
 
 Reversi::Reversi(QWidget *parent) :
 		QWidget(parent) {
+	FIELD_SIZE = 8;
 	ui.setupUi(this);
-	this->setFixedSize(460, 460);
+	this->setFixedSize(60 + FIELD_SIZE * 50, 60 + FIELD_SIZE * 50);
 	gameStatus = WHITE_PLAYER_TURN;
-	configureInterface();
-
-}
-
-void Reversi::configureInterface() {
 
 	lGameStatus = findChild<QLabel*>("gameStatus");
 	lGameScore = findChild<QLabel*>("gameScore");
@@ -25,7 +21,33 @@ void Reversi::configureInterface() {
 	blackImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
 	blackImg->load("resource/black.png");
 
-	blankImg = new QImage();
+	blankImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
+	blankImg->load("resource/blank.png");
+
+	activeImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
+	activeImg->load("resource/active.png");
+
+	configureInterface();
+
+}
+
+void Reversi::newGame(){
+	for (unint i = 0; i < FIELD_SIZE; i++) {
+		for (unint j = 0; j < FIELD_SIZE; j++) {
+			fieldStatus[i][j] = 0;
+		}
+	}
+	// Starting chip initialization
+	fieldStatus[FIELD_SIZE / 2 - 1][FIELD_SIZE / 2] = BLACK_PLAYER_TURN;
+	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2 - 1] = BLACK_PLAYER_TURN;
+	fieldStatus[FIELD_SIZE / 2 - 1][FIELD_SIZE / 2 - 1] = WHITE_PLAYER_TURN;
+	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2] = WHITE_PLAYER_TURN;
+	gameStatus = WHITE_PLAYER_TURN;
+	refreshField();
+	changePlayer(0);
+}
+
+void Reversi::configureInterface() {
 
 	// Configure UI game field
 	gamingField = new ClickableLabel**[FIELD_SIZE];
@@ -41,11 +63,12 @@ void Reversi::configureInterface() {
 		}
 	}
 	// Starting chip initialization
-	fieldStatus[3][4] = BLACK_PLAYER_TURN;
-	fieldStatus[4][3] = BLACK_PLAYER_TURN;
-	fieldStatus[3][3] = WHITE_PLAYER_TURN;
-	fieldStatus[4][4] = WHITE_PLAYER_TURN;
+	fieldStatus[FIELD_SIZE / 2 - 1][FIELD_SIZE / 2] = BLACK_PLAYER_TURN;
+	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2 - 1] = BLACK_PLAYER_TURN;
+	fieldStatus[FIELD_SIZE / 2 - 1][FIELD_SIZE / 2 - 1] = WHITE_PLAYER_TURN;
+	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2] = WHITE_PLAYER_TURN;
 	refreshField();
+	changePlayer(0);
 }
 
 void Reversi::cellClicked(int x, int y) {
@@ -53,11 +76,13 @@ void Reversi::cellClicked(int x, int y) {
 	if (fieldStatus[x][y] == 0) {
 		QList<Point> modifiedCells = lines.updateField();
 		if ((modifiedCells.size() > 0)) {
+			//showHints = false;
 			for (unint i = 0; i < modifiedCells.size(); i++) {
 				fieldStatus[modifiedCells.at(i).x][modifiedCells.at(i).y] =
 						gameStatus;
 			}
 			refreshField();
+			changePlayer(0);
 		}
 	}
 }
@@ -81,7 +106,6 @@ void Reversi::refreshField() {
 		}
 	}
 
-	changePlayer(0);
 	calculateScore();
 }
 
@@ -103,15 +127,22 @@ void Reversi::calculateScore() {
 }
 
 bool Reversi::thereIsNoLegalTurns() {
+	bool noLegalTurns = true;
 	for (unint i = 0; i < FIELD_SIZE; i++) {
 		for (unint j = 0; j < FIELD_SIZE; j++) {
 			Lines test(gameStatus, Point(i, j), fieldStatus, FIELD_SIZE);
-			if (fieldStatus[i][j] == 0 && test.updateField().size() > 0) {
-				return false;
+			QList<Point> activeFields = test.updateField();
+			if (fieldStatus[i][j] == 0 && activeFields.size() > 0) {
+				noLegalTurns = false;
+				for (int t = 0; showHints && t < activeFields.size(); t++) {
+					gamingField[i][j]->setPixmap(
+							QPixmap::fromImage(*activeImg));
+				}
 			}
 		}
 	}
-	return true;
+
+	return noLegalTurns;
 }
 
 void Reversi::changePlayer(int skippedTurns) {
@@ -126,10 +157,25 @@ void Reversi::changePlayer(int skippedTurns) {
 	}
 	if (thereIsNoLegalTurns() && skippedTurns < 1) {
 		changePlayer(1);
-	} else if (skippedTurns > 0) {
+	} else if (thereIsNoLegalTurns() && skippedTurns > 0) {
 		lGameStatus->setText("Game Over");
-		/* TODO end game */
-		return;
+		skippedTurns++;
+	}
+	switch (skippedTurns) {
+	case 1:{
+		QMessageBox msgBox1;
+		    msgBox1.setText("Player skipped a turn");
+		    msgBox1.setInformativeText("Player skipped a turn");
+		    msgBox1.exec();
+		break;
+	}
+	case 2:
+		{QMessageBox msgBox2;
+		    msgBox2.setText("Game over");
+		    msgBox2.setInformativeText(lGameScore->text());
+		    msgBox2.exec();
+		break;
+		}
 	}
 }
 

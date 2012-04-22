@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'MainWindow.h'
 **
-** Created: Sun Apr 22 21:07:12 2012
+** Created: Fri Apr 20 20:28:26 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -93,7 +93,24 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: newFile(); break;
+        case 1: open(); break;
+        case 2: save(); break;
+        case 3: print(); break;
+        case 4: undo(); break;
+        case 5: redo(); break;
+        case 6: cut(); break;
+        case 7: copy(); break;
+        case 8: paste(); break;
+        case 9: bold(); break;
+        case 10: italic(); break;
+        case 11: leftAlign(); break;
+        case 12: rightAlign(); break;
+        case 13: justify(); break;
+        case 14: center(); break;
+        case 15: setLineSpacing(); break;
+        case 16: setParagraphSpacing(); break;
         case 17: about(); break;
+        case 18: aboutQt(); break;
         default: ;
         }
         _id -= 19;
