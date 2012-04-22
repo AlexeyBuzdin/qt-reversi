@@ -5,9 +5,6 @@
  MainWindow::MainWindow()
  {
 
-	 this->setFixedSize(460, 500);
-	 this->layout()->setSizeConstraint( QLayout::SetFixedSize );
-
 	 centralWidget = new Reversi();
      setCentralWidget(centralWidget);
 
@@ -25,9 +22,9 @@
      statusBar()->showMessage(message);
  #endif
 
-     setWindowTitle(tr("Menus"));
-     setMinimumSize(160, 160);
-     resize(480, 320);
+     setWindowTitle(tr("Reversi"));
+	 this->setFixedSize(460, 500);
+
  }
 
  void MainWindow::contextMenuEvent(QContextMenuEvent *event)
@@ -36,7 +33,7 @@
      menu.exec(event->globalPos());
  }
 
- void MainWindow::newFile()
+ void MainWindow::newGame()
  {
 	 Reversi *reversi = (Reversi*)centralWidget;
 	 reversi->newGame();
@@ -44,27 +41,28 @@
 
  void MainWindow::about()
  {
-
-     QMessageBox::about(this, tr("About Menu"),
+     QMessageBox::about(this, tr("Reversi"),
              tr("The <b>Menu</b> example shows how to create "
                 "menu-bar menus and context menus."));
  }
 
- void MainWindow::aboutQt()
+ void MainWindow::disableTips()
  {
-
+	 Reversi *reversi = (Reversi*)centralWidget;
+	 reversi->changeShowHint();
  }
+
 
  void MainWindow::createActions()
  {
      newAct = new QAction(tr("&New"), this);
      newAct->setShortcuts(QKeySequence::New);
      newAct->setStatusTip(tr("Create a new file"));
-     connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
+     connect(newAct, SIGNAL(triggered()), this, SLOT(newGame()));
 
-     settings = new QAction(tr("&Settings"), this);
-     settings->setStatusTip(tr("Game Settings"));
-     connect(settings, SIGNAL(triggered()), this, SLOT(newFile()));
+     settings = new QAction(tr("&Disable tips"), this);
+     settings->setStatusTip(tr("Disable game tips"));
+     connect(settings, SIGNAL(triggered()), this, SLOT(disableTips()));
 
      aboutAct = new QAction(tr("&About"), this);
      aboutAct->setStatusTip(tr("Show the application's About box"));
@@ -76,6 +74,8 @@
  {
      fileMenu = menuBar()->addMenu(tr("&Game"));
      fileMenu->addAction(newAct);
+
+     fileMenu = menuBar()->addMenu(tr("&Settings"));
      fileMenu->addAction(settings);
 
      helpMenu = menuBar()->addMenu(tr("&Help"));

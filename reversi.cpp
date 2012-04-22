@@ -9,6 +9,9 @@ Reversi::Reversi(QWidget *parent) :
 		QWidget(parent) {
 	FIELD_SIZE = 8;
 	ui.setupUi(this);
+
+	showHints = true;
+
 	this->setFixedSize(60 + FIELD_SIZE * 50, 60 + FIELD_SIZE * 50);
 	gameStatus = WHITE_PLAYER_TURN;
 
@@ -76,7 +79,6 @@ void Reversi::cellClicked(int x, int y) {
 	if (fieldStatus[x][y] == 0) {
 		QList<Point> modifiedCells = lines.updateField();
 		if ((modifiedCells.size() > 0)) {
-			//showHints = false;
 			for (unint i = 0; i < modifiedCells.size(); i++) {
 				fieldStatus[modifiedCells.at(i).x][modifiedCells.at(i).y] =
 						gameStatus;
@@ -105,7 +107,6 @@ void Reversi::refreshField() {
 			gamingField[i][j]->setPixmap(QPixmap::fromImage(*figure));
 		}
 	}
-
 	calculateScore();
 }
 
@@ -134,7 +135,7 @@ bool Reversi::thereIsNoLegalTurns() {
 			QList<Point> activeFields = test.updateField();
 			if (fieldStatus[i][j] == 0 && activeFields.size() > 0) {
 				noLegalTurns = false;
-				for (int t = 0; showHints && t < activeFields.size(); t++) {
+				for (int t = 0; showHints && (t < activeFields.size()); t++) {
 					gamingField[i][j]->setPixmap(
 							QPixmap::fromImage(*activeImg));
 				}
@@ -190,4 +191,9 @@ Reversi::~Reversi() {
 	delete whiteImg;
 	delete blackImg;
 	delete blackImg;
+}
+
+void Reversi::changeShowHint(){
+	showHints = !showHints;
+	refreshField();
 }

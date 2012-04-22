@@ -15,6 +15,8 @@ public:
 	Reversi(QWidget *parent = 0);
 	~Reversi();
 	void newGame();
+	// Changes the value of showHint field
+	void changeShowHint();
 
 private:
 	Ui::ReversiClass ui;

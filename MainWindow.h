@@ -18,25 +18,9 @@ protected:
 	void contextMenuEvent(QContextMenuEvent *event);
 
 private slots:
-	void newFile();
-	void open();
-	void save();
-	void print();
-	void undo();
-	void redo();
-	void cut();
-	void copy();
-	void paste();
-	void bold();
-	void italic();
-	void leftAlign();
-	void rightAlign();
-	void justify();
-	void center();
-	void setLineSpacing();
-	void setParagraphSpacing();
+	void newGame();
 	void about();
-	void aboutQt();
+	void disableTips();
 
 private:
 	void createActions();
