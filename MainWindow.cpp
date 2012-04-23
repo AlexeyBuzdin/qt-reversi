@@ -60,7 +60,7 @@
      newAct->setStatusTip(tr("Create a new file"));
      connect(newAct, SIGNAL(triggered()), this, SLOT(newGame()));
 
-     settings = new QAction(tr("&Disable tips"), this);
+     settings = new QAction(tr("&Disable/Enable tips"), this);
      settings->setStatusTip(tr("Disable game tips"));
      connect(settings, SIGNAL(triggered()), this, SLOT(disableTips()));
 
