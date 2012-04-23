@@ -196,4 +196,7 @@ Reversi::~Reversi() {
 void Reversi::changeShowHint(){
 	showHints = !showHints;
 	refreshField();
+	if(showHints){
+		thereIsNoLegalTurns();
+	}
 }
