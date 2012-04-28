@@ -32,20 +32,33 @@
     </rect>
    </property>
    <property name="text">
-    <string>It's black player's turn</string>
+    <string>Black player's turn</string>
    </property>
   </widget>
   <widget class="QLabel" name="gameScore">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>290</x>
      <y>20</y>
      <width>160</width>
      <height>30</height>
     </rect>
    </property>
    <property name="text">
-    <string>Score:    2:2</string>
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lscore">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>10</y>
+     <width>41</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Score</string>
    </property>
   </widget>
  </widget>

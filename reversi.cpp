@@ -10,25 +10,9 @@ Reversi::Reversi(QWidget *parent) :
 	FIELD_SIZE = 8;
 	ui.setupUi(this);
 
-	showHints = true;
-
 	this->setFixedSize(60 + FIELD_SIZE * 50, 60 + FIELD_SIZE * 50);
-	gameStatus = WHITE_PLAYER_TURN;
-
-	lGameStatus = findChild<QLabel*>("gameStatus");
-	lGameScore = findChild<QLabel*>("gameScore");
-
-	whiteImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
-	whiteImg->load("resource/white.png");
-
-	blackImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
-	blackImg->load("resource/black.png");
-
-	blankImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
-	blankImg->load("resource/blank.png");
-
-	activeImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
-	activeImg->load("resource/active.png");
+	gameStatus = WHITE_PLAYER_TURN; //Turn zero
+	showHints = true;
 
 	configureInterface();
 
@@ -45,12 +29,28 @@ void Reversi::newGame(){
 	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2 - 1] = BLACK_PLAYER_TURN;
 	fieldStatus[FIELD_SIZE / 2 - 1][FIELD_SIZE / 2 - 1] = WHITE_PLAYER_TURN;
 	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2] = WHITE_PLAYER_TURN;
-	gameStatus = WHITE_PLAYER_TURN;
+	gameStatus = WHITE_PLAYER_TURN; // Turn zero
 	refreshField();
-	changePlayer(0);
+	changePlayer(0); // Change player to turn one
 }
 
 void Reversi::configureInterface() {
+
+	lGameStatus = findChild<QLabel*>("gameStatus");
+	lGameScore = findChild<QLabel*>("gameScore");
+
+	// Load pictures
+	whiteImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
+	whiteImg->load("resource/white.png");
+
+	blackImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
+	blackImg->load("resource/black.png");
+
+	blankImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
+	blankImg->load("resource/blank.png");
+
+	activeImg = new QImage(QSize(50, 50), QImage::Format_RGB16);
+	activeImg->load("resource/active.png");
 
 	// Configure UI game field
 	gamingField = new ClickableLabel**[FIELD_SIZE];
@@ -62,31 +62,9 @@ void Reversi::configureInterface() {
 			gamingField[i][j] = new ClickableLabel(i, j, this);
 			QObject::connect(gamingField[i][j], SIGNAL (clicked(int, int)),
 					this, SLOT (cellClicked(int, int)));
-			fieldStatus[i][j] = 0;
 		}
 	}
-	// Starting chip initialization
-	fieldStatus[FIELD_SIZE / 2 - 1][FIELD_SIZE / 2] = BLACK_PLAYER_TURN;
-	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2 - 1] = BLACK_PLAYER_TURN;
-	fieldStatus[FIELD_SIZE / 2 - 1][FIELD_SIZE / 2 - 1] = WHITE_PLAYER_TURN;
-	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2] = WHITE_PLAYER_TURN;
-	refreshField();
-	changePlayer(0);
-}
-
-void Reversi::cellClicked(int x, int y) {
-	Lines lines(gameStatus, Point(x, y), fieldStatus, FIELD_SIZE);
-	if (fieldStatus[x][y] == 0) {
-		QList<Point> modifiedCells = lines.updateField();
-		if ((modifiedCells.size() > 0)) {
-			for (unint i = 0; i < modifiedCells.size(); i++) {
-				fieldStatus[modifiedCells.at(i).x][modifiedCells.at(i).y] =
-						gameStatus;
-			}
-			refreshField();
-			changePlayer(0);
-		}
-	}
+	newGame();
 }
 
 void Reversi::refreshField() {
@@ -94,10 +72,10 @@ void Reversi::refreshField() {
 	for (unint i = 0; i < FIELD_SIZE; i++) {
 		for (unint j = 0; j < FIELD_SIZE; j++) {
 			switch (fieldStatus[i][j]) {
-			case -1:
+			case WHITE_PLAYER_TURN:
 				figure = whiteImg;
 				break;
-			case 1:
+			case BLACK_PLAYER_TURN:
 				figure = blackImg;
 				break;
 			default:
@@ -111,20 +89,20 @@ void Reversi::refreshField() {
 }
 
 void Reversi::calculateScore() {
-	int countBlack = 0;
-	int countWhite = 0;
+	blackChipCount = 0;
+	whiteChipCount = 0;
 	for (unint i = 0; i < FIELD_SIZE; i++) {
 		for (unint j = 0; j < FIELD_SIZE; j++) {
 			if (fieldStatus[i][j] == BLACK_PLAYER_TURN) {
-				countBlack++;
+				blackChipCount++;
 			}
 			if (fieldStatus[i][j] == WHITE_PLAYER_TURN) {
-				countWhite++;
+				whiteChipCount++;
 			}
 		}
 	}
 	lGameScore->setText(
-			QString("Score:   %1:%2").arg(countBlack).arg(countWhite));
+			QString("Black: %1 | White: %2").arg(blackChipCount).arg(whiteChipCount));
 }
 
 bool Reversi::thereIsNoLegalTurns() {
@@ -149,11 +127,11 @@ bool Reversi::thereIsNoLegalTurns() {
 void Reversi::changePlayer(int skippedTurns) {
 	// Change player turn
 	switch (gameStatus *= -1) {
-	case -1:
-		lGameStatus->setText("It\' white player\'s turn");
+	case WHITE_PLAYER_TURN:
+		lGameStatus->setText("White player\'s turn");
 		break;
-	case 1:
-		lGameStatus->setText("It\' black player\'s turn");
+	case BLACK_PLAYER_TURN:
+		lGameStatus->setText("Black player\'s turn");
 		break;
 	}
 	if (thereIsNoLegalTurns() && skippedTurns < 1) {
@@ -162,21 +140,59 @@ void Reversi::changePlayer(int skippedTurns) {
 		lGameStatus->setText("Game Over");
 		skippedTurns++;
 	}
+	// Counts the amount of time this function was called
 	switch (skippedTurns) {
 	case 1:{
 		QMessageBox msgBox1;
-		    msgBox1.setText("Player skipped a turn");
-		    msgBox1.setInformativeText("Player skipped a turn");
+			switch(gameStatus*(-1)){
+				case WHITE_PLAYER_TURN:
+					msgBox1.setText("White player skips a turn");
+					break;
+				case BLACK_PLAYER_TURN:
+					msgBox1.setText("Black player skips a turn");
+					break;
+			}
 		    msgBox1.exec();
 		break;
 	}
-	case 2:
-		{QMessageBox msgBox2;
-		    msgBox2.setText("Game over");
+	case 2:{
+			QMessageBox msgBox2;
+			if((blackChipCount-whiteChipCount)< 0){
+				msgBox2.setText("White player wins");
+			}
+			else if((blackChipCount-whiteChipCount)>0){
+				msgBox2.setText("Black player wins");
+			}
+			else {
+				msgBox2.setText("Its a draw");
+			}
+
 		    msgBox2.setInformativeText(lGameScore->text());
 		    msgBox2.exec();
-		break;
+		    break;
 		}
+	}
+}
+
+void Reversi::cellClicked(int x, int y) {
+	Lines lines(gameStatus, Point(x, y), fieldStatus, FIELD_SIZE);
+	if (fieldStatus[x][y] == 0) {
+		QList<Point> modifiedCells = lines.updateField();
+		if ((modifiedCells.size() > 0)) {
+			for (unint i = 0; i < modifiedCells.size(); i++) {
+				fieldStatus[modifiedCells.at(i).x][modifiedCells.at(i).y] =
+						gameStatus;
+			}
+			refreshField();
+			changePlayer(0);
+		}
+	}
+}
+void Reversi::changeShowHint(){
+	showHints = !showHints;
+	refreshField();
+	if(showHints){
+		thereIsNoLegalTurns();
 	}
 }
 
@@ -191,12 +207,4 @@ Reversi::~Reversi() {
 	delete whiteImg;
 	delete blackImg;
 	delete blackImg;
-}
-
-void Reversi::changeShowHint(){
-	showHints = !showHints;
-	refreshField();
-	if(showHints){
-		thereIsNoLegalTurns();
-	}
 }

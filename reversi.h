@@ -36,6 +36,9 @@ private:
 	bool playWithAi;
 	unint FIELD_SIZE;
 
+	int blackChipCount;
+	int whiteChipCount;
+
 	QLabel *lGameStatus;
 	QLabel *lGameScore;
 
