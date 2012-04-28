@@ -1,3 +1,5 @@
 *.o
 debug/
-relese/
+release/
+moc_reversi.cpp
+moc_ClickableLabel.cpp
