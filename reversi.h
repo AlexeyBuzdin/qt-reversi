@@ -2,13 +2,13 @@
 #define REVERSI_H
 
 #include <QtGui/QWidget>
+#include <qthread.h>
 #include "ui_reversi.h"
 #include "src/ClickableLabel.h"
 #include "src/Lines.h"
 #include "src/Point.h"
 #include "src/Map.h"
 #include "src/AI.h"
-
 
 class Reversi: public QWidget {
 Q_OBJECT
@@ -34,6 +34,7 @@ private:
 	// Refreshes UI gaming field with data taken from fieldStatus
 	void refreshField();
 
+	bool gameOver;
 	bool showHints;
 	bool playWithAi;
 	unint FIELD_SIZE;

@@ -11,6 +11,7 @@ Reversi::Reversi(QWidget *parent) : QWidget(parent) {
 	gameStatus = WHITE_PLAYER_TURN; //Turn zero
 	showHints = true;
 	playWithAi = false;
+	gameOver = false;
 
 	configureInterface();
 	newGame();
@@ -19,6 +20,7 @@ Reversi::Reversi(QWidget *parent) : QWidget(parent) {
 void Reversi::newGame(){
 	map = new Map(FIELD_SIZE);
 
+	gameOver = false;
 	gameStatus = WHITE_PLAYER_TURN; // Turn zero
 	refreshField();
 	changePlayer(0); // Change player to turn one
@@ -140,11 +142,12 @@ void Reversi::changePlayer(int skippedTurns) {
 
 		    msgBox2.setInformativeText(lGameScore->text());
 		    msgBox2.exec();
+		    gameOver = true;
 		    return;
 		}
 	}
 
-	if(playWithAi && gameStatus==WHITE_PLAYER_TURN){
+	if(playWithAi && gameStatus==WHITE_PLAYER_TURN && !gameOver){
 		AI *bot = new AI(gameStatus);
 		bot->makeTurn(map);
 		refreshField();

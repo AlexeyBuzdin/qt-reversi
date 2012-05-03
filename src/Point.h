@@ -7,6 +7,7 @@ public:
 	int y;
 
 	bool operator!=(Point point);
+	bool operator==(Point point);
 	Point(){};
 	Point(int x, int y);
 	virtual ~Point(){};
