@@ -7,6 +7,7 @@
 #include "src/Lines.h"
 #include "src/Point.h"
 #include "src/Map.h"
+#include "src/AI.h"
 
 
 class Reversi: public QWidget {

@@ -124,7 +124,7 @@ void Reversi::changePlayer(int skippedTurns) {
 					break;
 			}
 		    msgBox1.exec();
-		break;
+		return;
 	}
 	case 2:{
 			QMessageBox msgBox2;
@@ -140,8 +140,15 @@ void Reversi::changePlayer(int skippedTurns) {
 
 		    msgBox2.setInformativeText(lGameScore->text());
 		    msgBox2.exec();
-		    break;
+		    return;
 		}
+	}
+
+	if(playWithAi && gameStatus==WHITE_PLAYER_TURN){
+		AI *bot = new AI(gameStatus);
+		bot->makeTurn(map);
+		refreshField();
+		changePlayer(0);
 	}
 }
 
