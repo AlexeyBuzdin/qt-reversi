@@ -8,7 +8,7 @@ class ClickableLabel: public QLabel {
 	Q_OBJECT
 public:
 	ClickableLabel(int x, int y, QWidget * parent = 0);
-	virtual ~ClickableLabel(){};
+	virtual ~ClickableLabel();
 
 signals:
 	void clicked(int x, int y);

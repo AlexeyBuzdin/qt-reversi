@@ -55,6 +55,11 @@
 	 reversi->changeShowHint();
  }
 
+ void MainWindow::changeAI()
+ {
+	 Reversi *reversi = (Reversi*)centralWidget;
+	 reversi->changeAI();
+ }
 
  void MainWindow::createActions()
  {
@@ -66,6 +71,10 @@
      settings = new QAction(tr("&Disable/Enable tips"), this);
      settings->setStatusTip(tr("Disable game tips"));
      connect(settings, SIGNAL(triggered()), this, SLOT(disableTips()));
+
+     ai = new QAction(tr("&Disable/Enable AI"), this);
+     ai->setStatusTip(tr("Disable Artificial Intelligent"));
+     connect(ai, SIGNAL(triggered()), this, SLOT(changeAI()));
 
      aboutAct = new QAction(tr("&About"), this);
      aboutAct->setStatusTip(tr("Show the application's About box"));
@@ -80,6 +89,7 @@
 
      fileMenu = menuBar()->addMenu(tr("&Settings"));
      fileMenu->addAction(settings);
+     fileMenu->addAction(ai);
 
      helpMenu = menuBar()->addMenu(tr("&Help"));
      helpMenu->addAction(aboutAct);

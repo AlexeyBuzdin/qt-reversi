@@ -6,6 +6,7 @@
 #include "src/ClickableLabel.h"
 #include "src/Lines.h"
 #include "src/Point.h"
+#include "src/Map.h"
 
 
 class Reversi: public QWidget {
@@ -17,16 +18,16 @@ public:
 	void newGame();
 	// Changes the value of showHint field
 	void changeShowHint();
-
+	// Changes the value of playWithAi field
+	void changeAI();
 private:
 	Ui::ReversiClass ui;
+	Map *map;
 
 	// Method for UI configuration, used at constructor phase
 	void configureInterface();
-	// Refreshes the gaming score
-	void calculateScore();
 	// Returns true if player can not make a legal turn
-	bool thereIsNoLegalTurns();
+	bool checkForLegalTurns();
 	// Change player turn or ends the game if skippedTurns is 2
 	void changePlayer(int skippedTurns);
 	// Refreshes UI gaming field with data taken from fieldStatus
@@ -36,9 +37,6 @@ private:
 	bool playWithAi;
 	unint FIELD_SIZE;
 
-	int blackChipCount;
-	int whiteChipCount;
-
 	QLabel *lGameStatus;
 	QLabel *lGameScore;
 
@@ -46,8 +44,6 @@ private:
 	int gameStatus;
 	// UI game field
 	ClickableLabel ***gamingField;
-	// Game field
-	int **fieldStatus;
 
 	QImage *whiteImg;
 	QImage *blackImg;

@@ -12,3 +12,7 @@ ClickableLabel::ClickableLabel(int x, int y, QWidget * parent) :
 void ClickableLabel::mousePressEvent(QMouseEvent * event) {
 	emit clicked(xAssis, yAssis);
 }
+
+ClickableLabel::~ClickableLabel(){
+	this->hide();
+}

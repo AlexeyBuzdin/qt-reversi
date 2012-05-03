@@ -13,7 +13,7 @@ public:
 	int **gameField;
 	int fieldSize;
 
-	QList<Point> updateField();
+	QList<Point> getActiveTiles();
 	QList<Point> checkALine(Point pattern);
 
 	Lines(int chipColor, Point point, int** field, int fieldSize);

@@ -14,7 +14,7 @@ Lines::Lines(int chipColor, Point point, int** field, int fieldSize) {
 	this->fieldSize = fieldSize;
 }
 
-QList<Point> Lines::updateField() {
+QList<Point> Lines::getActiveTiles() {
 	gameField[point.x][point.y] = chipColor;
 
 	QList<Point> result;

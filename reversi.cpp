@@ -5,36 +5,28 @@ typedef unsigned int unint;
 #define WHITE_PLAYER_TURN -1
 #define BLACK_PLAYER_TURN 1
 
-Reversi::Reversi(QWidget *parent) :
-		QWidget(parent) {
+Reversi::Reversi(QWidget *parent) : QWidget(parent) {
 	FIELD_SIZE = 8;
-	ui.setupUi(this);
 
-	this->setFixedSize(60 + FIELD_SIZE * 50, 60 + FIELD_SIZE * 50);
 	gameStatus = WHITE_PLAYER_TURN; //Turn zero
 	showHints = true;
+	playWithAi = false;
 
 	configureInterface();
-
+	newGame();
 }
 
 void Reversi::newGame(){
-	for (unint i = 0; i < FIELD_SIZE; i++) {
-		for (unint j = 0; j < FIELD_SIZE; j++) {
-			fieldStatus[i][j] = 0;
-		}
-	}
-	// Starting chip initialization
-	fieldStatus[FIELD_SIZE / 2 - 1][FIELD_SIZE / 2] = BLACK_PLAYER_TURN;
-	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2 - 1] = BLACK_PLAYER_TURN;
-	fieldStatus[FIELD_SIZE / 2 - 1][FIELD_SIZE / 2 - 1] = WHITE_PLAYER_TURN;
-	fieldStatus[FIELD_SIZE / 2][FIELD_SIZE / 2] = WHITE_PLAYER_TURN;
+	map = new Map(FIELD_SIZE);
+
 	gameStatus = WHITE_PLAYER_TURN; // Turn zero
 	refreshField();
 	changePlayer(0); // Change player to turn one
 }
 
 void Reversi::configureInterface() {
+	ui.setupUi(this);
+	this->setFixedSize(60 + FIELD_SIZE * 50, 60 + FIELD_SIZE * 50);
 
 	lGameStatus = findChild<QLabel*>("gameStatus");
 	lGameScore = findChild<QLabel*>("gameScore");
@@ -54,24 +46,21 @@ void Reversi::configureInterface() {
 
 	// Configure UI game field
 	gamingField = new ClickableLabel**[FIELD_SIZE];
-	fieldStatus = new int*[FIELD_SIZE];
 	for (unint i = 0; i < FIELD_SIZE; i++) {
 		gamingField[i] = new ClickableLabel*[FIELD_SIZE];
-		fieldStatus[i] = new int[FIELD_SIZE];
 		for (unint j = 0; j < FIELD_SIZE; j++) {
 			gamingField[i][j] = new ClickableLabel(i, j, this);
 			QObject::connect(gamingField[i][j], SIGNAL (clicked(int, int)),
 					this, SLOT (cellClicked(int, int)));
 		}
 	}
-	newGame();
 }
 
 void Reversi::refreshField() {
 	QImage *figure;
 	for (unint i = 0; i < FIELD_SIZE; i++) {
 		for (unint j = 0; j < FIELD_SIZE; j++) {
-			switch (fieldStatus[i][j]) {
+			switch (map->fieldStatus[i][j]) {
 			case WHITE_PLAYER_TURN:
 				figure = whiteImg;
 				break;
@@ -85,42 +74,24 @@ void Reversi::refreshField() {
 			gamingField[i][j]->setPixmap(QPixmap::fromImage(*figure));
 		}
 	}
-	calculateScore();
+	// Set score
+	map->setScore();
+	lGameScore->setText(QString("Black: %1 | White: %2").arg(map->blackChipCount).arg(map->whiteChipCount));
 }
 
-void Reversi::calculateScore() {
-	blackChipCount = 0;
-	whiteChipCount = 0;
-	for (unint i = 0; i < FIELD_SIZE; i++) {
-		for (unint j = 0; j < FIELD_SIZE; j++) {
-			if (fieldStatus[i][j] == BLACK_PLAYER_TURN) {
-				blackChipCount++;
-			}
-			if (fieldStatus[i][j] == WHITE_PLAYER_TURN) {
-				whiteChipCount++;
-			}
+bool Reversi::checkForLegalTurns() {
+	bool noLegalTurns = map->noLegalTurns(gameStatus);
+	if(noLegalTurns || !showHints){
+		return noLegalTurns;
+	}
+	QList<Point> hintList = map->getActiveTiles(gameStatus);
+	for (int t = 0; showHints && t < hintList.size(); t++) {
+		int x = hintList.at(t).x;
+		int y = hintList.at(t).y;
+		if(!map->fieldStatus[x][y]){
+			gamingField[x][y]->setPixmap(QPixmap::fromImage(*activeImg));
 		}
 	}
-	lGameScore->setText(
-			QString("Black: %1 | White: %2").arg(blackChipCount).arg(whiteChipCount));
-}
-
-bool Reversi::thereIsNoLegalTurns() {
-	bool noLegalTurns = true;
-	for (unint i = 0; i < FIELD_SIZE; i++) {
-		for (unint j = 0; j < FIELD_SIZE; j++) {
-			Lines test(gameStatus, Point(i, j), fieldStatus, FIELD_SIZE);
-			QList<Point> activeFields = test.updateField();
-			if (fieldStatus[i][j] == 0 && activeFields.size() > 0) {
-				noLegalTurns = false;
-				for (int t = 0; showHints && (t < activeFields.size()); t++) {
-					gamingField[i][j]->setPixmap(
-							QPixmap::fromImage(*activeImg));
-				}
-			}
-		}
-	}
-
 	return noLegalTurns;
 }
 
@@ -134,9 +105,9 @@ void Reversi::changePlayer(int skippedTurns) {
 		lGameStatus->setText("Black player\'s turn");
 		break;
 	}
-	if (thereIsNoLegalTurns() && skippedTurns < 1) {
+	if (checkForLegalTurns() && skippedTurns < 1) {
 		changePlayer(1);
-	} else if (thereIsNoLegalTurns() && skippedTurns > 0) {
+	} else if (checkForLegalTurns() && skippedTurns > 0) {
 		lGameStatus->setText("Game Over");
 		skippedTurns++;
 	}
@@ -157,10 +128,10 @@ void Reversi::changePlayer(int skippedTurns) {
 	}
 	case 2:{
 			QMessageBox msgBox2;
-			if((blackChipCount-whiteChipCount)< 0){
 				msgBox2.setText("White player wins");
+			if((map->blackChipCount-map->whiteChipCount)< 0){
 			}
-			else if((blackChipCount-whiteChipCount)>0){
+			else if((map->blackChipCount-map->whiteChipCount)>0){
 				msgBox2.setText("Black player wins");
 			}
 			else {
@@ -175,12 +146,12 @@ void Reversi::changePlayer(int skippedTurns) {
 }
 
 void Reversi::cellClicked(int x, int y) {
-	Lines lines(gameStatus, Point(x, y), fieldStatus, FIELD_SIZE);
-	if (fieldStatus[x][y] == 0) {
-		QList<Point> modifiedCells = lines.updateField();
+	Lines lines(gameStatus, Point(x, y), map->fieldStatus, FIELD_SIZE);
+	if (map->fieldStatus[x][y] == 0) {
+		QList<Point> modifiedCells = lines.getActiveTiles();
 		if ((modifiedCells.size() > 0)) {
 			for (unint i = 0; i < modifiedCells.size(); i++) {
-				fieldStatus[modifiedCells.at(i).x][modifiedCells.at(i).y] =
+				map->fieldStatus[modifiedCells.at(i).x][modifiedCells.at(i).y] =
 						gameStatus;
 			}
 			refreshField();
@@ -192,17 +163,21 @@ void Reversi::changeShowHint(){
 	showHints = !showHints;
 	refreshField();
 	if(showHints){
-		thereIsNoLegalTurns();
+		checkForLegalTurns();
 	}
+}
+
+void Reversi::changeAI(){
+	playWithAi = !playWithAi;
 }
 
 Reversi::~Reversi() {
 	for (unint i = 0; i < FIELD_SIZE; i++) {
 		delete[] gamingField[i];
-		delete[] fieldStatus[i];
 	}
 	delete[] gamingField;
-	delete[] fieldStatus;
+
+	delete map;
 
 	delete whiteImg;
 	delete blackImg;

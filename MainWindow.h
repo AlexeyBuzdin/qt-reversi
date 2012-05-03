@@ -21,6 +21,7 @@ private slots:
 	void newGame();
 	void about();
 	void disableTips();
+	void changeAI();
 
 private:
 	void createActions();
@@ -32,6 +33,7 @@ private:
 	QActionGroup *alignmentGroup;
 	QAction *newAct;
 	QAction *settings;
+	QAction *ai;
 	QAction *aboutAct;
 };
 
