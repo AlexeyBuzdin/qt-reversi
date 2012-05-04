@@ -45,7 +45,7 @@
             		 "<tr><td align=\"center\"><img src=\"resource/logo.png\"></td></tr>"
             		 "<tr><td>Open Source Reversi client v.0.99</td></tr> "
             		 "<tr><td>Created by <a href=\"http://www.linkedin.com/pub/alexey-buzdin/33/690/457\">Alexey Buzdin</a></td></tr>"
-            		 "<tr><td>Source code can be seen <b><a href=\" https://github.com/LArchaon/Reversi\">here</a></b>.</td></tr>"
+            		 "<tr><td>Source code can be seen <b><a href=\"https://github.com/LArchaon/Reversi\">here</a></b>.</td></tr>"
                 "</table>"));
  }
 
