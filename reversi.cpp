@@ -4,6 +4,7 @@ typedef unsigned int unint;
 
 #define WHITE_PLAYER_TURN -1
 #define BLACK_PLAYER_TURN 1
+#define BACKGROUND_SIZE 470
 
 Reversi::Reversi(QWidget *parent) : QWidget(parent) {
 	FIELD_SIZE = 8;
@@ -28,10 +29,14 @@ void Reversi::newGame(){
 
 void Reversi::configureInterface() {
 	ui.setupUi(this);
-	this->setFixedSize(60 + FIELD_SIZE * 50, 60 + FIELD_SIZE * 50);
+	this->setFixedSize(BACKGROUND_SIZE, BACKGROUND_SIZE);
 
 	lGameStatus = findChild<QLabel*>("gameStatus");
 	lGameScore = findChild<QLabel*>("gameScore");
+	QLabel *background = new QLabel(this);
+	QImage *backgroundImg = new QImage(QSize(470, 470), QImage::Format_RGB16);
+	backgroundImg->load("resource/field.png");
+	background->setPixmap(QPixmap::fromImage(*backgroundImg));
 
 	// Load pictures
 	whiteImg = new QImage(QSize(50, 50), QImage::Format_RGB16);

@@ -22,7 +22,7 @@
  #endif
 
      setWindowTitle(tr("Reversi"));
-	 this->setFixedSize(460, 500);
+	 this->setFixedSize(470, 490);
 
  }
 
