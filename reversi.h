@@ -9,12 +9,13 @@
 #include "src/Point.h"
 #include "src/Map.h"
 #include "src/AI.h"
+#include "MainWindow.h"
 
 class Reversi: public QWidget {
 Q_OBJECT
 
 public:
-	Reversi(QWidget *parent = 0);
+	Reversi(MainWindow *parent = 0);
 	~Reversi();
 	void newGame();
 	// Changes the value of showHint field
@@ -22,6 +23,7 @@ public:
 	// Changes the value of playWithAi field
 	void changeAI();
 private:
+	MainWindow *main;
 	Ui::ReversiClass ui;
 	Map *map;
 
@@ -39,8 +41,7 @@ private:
 	bool playWithAi;
 	unint FIELD_SIZE;
 
-	QLabel *lGameStatus;
-	QLabel *lGameScore;
+	QString *gameScore;
 
 	// Field that shows which turn it is.
 	int gameStatus;

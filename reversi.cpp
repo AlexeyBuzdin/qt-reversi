@@ -6,9 +6,9 @@ typedef unsigned int unint;
 #define BLACK_PLAYER_TURN 1
 #define BACKGROUND_SIZE 470
 
-Reversi::Reversi(QWidget *parent) : QWidget(parent) {
+Reversi::Reversi(MainWindow *parent) : QWidget(0) {
 	FIELD_SIZE = 8;
-
+	main = parent;
 	gameStatus = WHITE_PLAYER_TURN; //Turn zero
 	showHints = true;
 	playWithAi = false;
@@ -30,9 +30,8 @@ void Reversi::newGame(){
 void Reversi::configureInterface() {
 	ui.setupUi(this);
 	this->setFixedSize(BACKGROUND_SIZE, BACKGROUND_SIZE);
+	gameScore = new QString("");
 
-	lGameStatus = findChild<QLabel*>("gameStatus");
-	lGameScore = findChild<QLabel*>("gameScore");
 	QLabel *background = new QLabel(this);
 	QImage *backgroundImg = new QImage(QSize(470, 470), QImage::Format_RGB16);
 	backgroundImg->load("resource/field.png");
@@ -83,7 +82,7 @@ void Reversi::refreshField() {
 	}
 	// Set score
 	map->setScore();
-	lGameScore->setText(QString("Black: %1 | White: %2").arg(map->blackChipCount).arg(map->whiteChipCount));
+	*gameScore = QString(" Black: %1 | White: %2").arg(map->blackChipCount).arg(map->whiteChipCount);
 }
 
 bool Reversi::checkForLegalTurns() {
@@ -106,16 +105,26 @@ void Reversi::changePlayer(int skippedTurns) {
 	// Change player turn
 	switch (gameStatus *= -1) {
 	case WHITE_PLAYER_TURN:
-		lGameStatus->setText("White player\'s turn");
+	{
+		QString result1 = QString("White player\'s turn");
+		result1.append(gameScore);
+		main->setStatusBar(&result1);
 		break;
+	}
 	case BLACK_PLAYER_TURN:
-		lGameStatus->setText("Black player\'s turn");
+	{
+		QString result2 = QString("Black player\'s turn");
+		result2.append(gameScore);
+		main->setStatusBar(&result2);
 		break;
+	}
 	}
 	if (checkForLegalTurns() && skippedTurns < 1) {
 		changePlayer(1);
 	} else if (checkForLegalTurns() && skippedTurns > 0) {
-		lGameStatus->setText("Game Over");
+		QString result3 = QString("Game over");
+		result3.append(gameScore);
+		main->setStatusBar(&result3);
 		skippedTurns++;
 	}
 	// Counts the amount of time this function was called
@@ -145,7 +154,7 @@ void Reversi::changePlayer(int skippedTurns) {
 				msgBox2.setText("Its a draw");
 			}
 
-		    msgBox2.setInformativeText(lGameScore->text());
+		    msgBox2.setInformativeText(*gameScore);
 		    msgBox2.exec();
 		    gameOver = true;
 		    return;
@@ -193,6 +202,7 @@ Reversi::~Reversi() {
 	delete[] gamingField;
 
 	delete map;
+	delete gameScore;
 
 	delete whiteImg;
 	delete blackImg;

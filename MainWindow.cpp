@@ -4,7 +4,7 @@
 
  MainWindow::MainWindow()
  {
-	 centralWidget = new Reversi();
+	 centralWidget = new Reversi(this);
      setCentralWidget(centralWidget);
 
      QWidget *topFiller = new QWidget;
@@ -18,7 +18,8 @@
 
  #ifndef Q_OS_SYMBIAN
      QString message = tr("Have a nice game");
-     statusBar()->showMessage(message);
+     sBar = statusBar();
+     sBar->showMessage(message);
  #endif
 
      setWindowTitle(tr("Reversi"));
@@ -94,4 +95,8 @@
      helpMenu = menuBar()->addMenu(tr("&Help"));
      helpMenu->addAction(aboutAct);
 
+ }
+
+ void MainWindow::setStatusBar (QString *string){
+	 statusBar()->showMessage(*string);
  }

@@ -10,10 +10,12 @@ class QMenu;
 class MainWindow: public QMainWindow {
 Q_OBJECT
 public:
+	QStatusBar *sBar;
 	MainWindow();
 	virtual ~MainWindow() {
 	}
 	;
+	void setStatusBar (QString *string);
 protected:
 	void contextMenuEvent(QContextMenuEvent *event);
 
