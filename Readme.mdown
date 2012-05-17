@@ -2,8 +2,9 @@ Briefly about the project
 ----------------------
 ![logo](http://i178.photobucket.com/albums/w272/Lord_Archaon/logo.png)
 
-The goal of a project is to create a Reversi client, that would support a hot-seat playing mode for users. 
-The whole project is done with QT4 and C++.
+This project was started as a coursework assignment for C++ class at Transport and Telecomunication Institute.
+The goal of a project is to create a Reversi client, that would support a hot-seat playing mode for users and a ligthweigth AI.
+Whole project is done with QT4 and C++.
 
 Reversi
 ----------------------
