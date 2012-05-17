@@ -1,0 +1,2 @@
+Reversi
+A game developed in C++ and QT4
