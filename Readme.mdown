@@ -15,4 +15,4 @@ Each player's objective is generally to have as many disks ones own color at the
 
 ----------------------
 
-[![Video Screenshot](https://raw.github.com/silkeostermann/iCube/master/video.png)](http://www.youtube.com/watch?v=AKY7RxomrSs&feature=g-upl)
+[![Video Screenshot](https://github.com/LArchaon/Reversi/raw/master/resource/field.png)](http://www.youtube.com/watch?v=AKY7RxomrSs&feature=g-upl)
